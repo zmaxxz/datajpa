@@ -1,0 +1,1808 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "Сервіс чатбота"
+  },
+  "host": "chat-bot.openbudget.gov.ua",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "DWH",
+      "description": "Dwh Controller"
+    },
+    {
+      "name": "IFIs bot",
+      "description": "Ifi Controller"
+    },
+    {
+      "name": "Openbudget bot",
+      "description": "Open Budget Controller"
+    },
+    {
+      "name": "Spending bot",
+      "description": "Spending Controller"
+    }
+  ],
+  "paths": {
+    "/dwh/pdv": {
+      "get": {
+        "tags": [
+          "DWH"
+        ],
+        "summary": "getPdv",
+        "operationId": "getPdvUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "declarationNumber",
+            "in": "query",
+            "description": "declarationNumber",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "payerIpn",
+            "in": "query",
+            "description": "payerIpn",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "payerName",
+            "in": "query",
+            "description": "payerName",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PdvDTO"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/dwh/pdv/aggregate": {
+      "get": {
+        "tags": [
+          "DWH"
+        ],
+        "summary": "getAggregateResult",
+        "operationId": "getAggregateResultUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "searchParam",
+            "in": "query",
+            "description": "payer ipn or name",
+            "required": false,
+            "type": "string",
+            "allowEmptyValue": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/PdvAggregateDto"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/dwh/pdv/payer": {
+      "get": {
+        "tags": [
+          "DWH"
+        ],
+        "summary": "getPayerInfo",
+        "operationId": "getPayerInfoUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "payerName",
+            "in": "query",
+            "description": "payerName",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PayerDTO"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/ifis/creditors": {
+      "get": {
+        "tags": [
+          "IFIs bot"
+        ],
+        "summary": "Отримати список МФО",
+        "operationId": "projectCreditorsUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/InfoDTO"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/ifis/fields": {
+      "get": {
+        "tags": [
+          "IFIs bot"
+        ],
+        "summary": "Отримати список галузей проектів",
+        "operationId": "projectFieldsUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/InfoDTO"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/ifis/ping": {
+      "get": {
+        "tags": [
+          "IFIs bot"
+        ],
+        "summary": "Перевірка доступності API",
+        "operationId": "pingUsingGET",
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/ifis/project/{projectId}": {
+      "get": {
+        "tags": [
+          "IFIs bot"
+        ],
+        "summary": "Відображення повної інформації про проект",
+        "operationId": "projectInfoUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "projectId",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ProjectDTO"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/ifis/projects": {
+      "get": {
+        "tags": [
+          "IFIs bot"
+        ],
+        "summary": "Відображення переліку проектів",
+        "operationId": "projectByFieldUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "creditorId",
+            "in": "query",
+            "description": "creditorId",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "fieldId",
+            "in": "query",
+            "description": "fieldId",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "projectName",
+            "in": "query",
+            "description": "projectName",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/InfoDTO"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/ifis/statistic/{statisticType}": {
+      "get": {
+        "tags": [
+          "IFIs bot"
+        ],
+        "summary": "Статистика по стадіям",
+        "operationId": "statisticUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "statisticType",
+            "in": "path",
+            "description": "statisticType",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "STATE",
+              "FIELD",
+              "CREDITOR"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProjectStatDTO"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/openbudget/local/cons/economic": {
+      "get": {
+        "tags": [
+          "Openbudget bot"
+        ],
+        "summary": "Повертає видатки місцевого бюджету за економічною класифікацією",
+        "operationId": "getLocalExpensesEconomicUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "description": "code",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "codeBudget",
+            "in": "query",
+            "description": "codeBudget",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ExpensesIncomesFullInfoDTO"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/openbudget/local/cons/functional": {
+      "get": {
+        "tags": [
+          "Openbudget bot"
+        ],
+        "summary": "Повертає видатки місцевого бюджету за функціональною класифікацією",
+        "operationId": "getLocalExpensesFunctionalUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "description": "code",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "codeBudget",
+            "in": "query",
+            "description": "codeBudget",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ExpensesIncomesFullInfoDTO"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/openbudget/local/cons/program": {
+      "get": {
+        "tags": [
+          "Openbudget bot"
+        ],
+        "summary": "Повертає видатки місцевого бюджету за програмною класифікацією",
+        "operationId": "getLocalExpensesProgramUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "description": "code",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "codeBudget",
+            "in": "query",
+            "description": "codeBudget",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ExpensesIncomesFullInfoDTO"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/openbudget/local/inco": {
+      "get": {
+        "tags": [
+          "Openbudget bot"
+        ],
+        "summary": "Пошук за доходами МБ",
+        "operationId": "getLocalIncoUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "description": "code",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "codeBudget",
+            "in": "query",
+            "description": "codeBudget",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ExpensesIncomesFullInfoDTO"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/openbudget/local/total": {
+      "get": {
+        "tags": [
+          "Openbudget bot"
+        ],
+        "summary": "Загальна інформація по місцевому бюдету",
+        "operationId": "getLocalTotalInfoUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "description": "code",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/TotalDTO"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/openbudget/national/cons/economic": {
+      "get": {
+        "tags": [
+          "Openbudget bot"
+        ],
+        "summary": "Повертає видатки державного бюджету за економічною класифікацією",
+        "operationId": "getExpensesEconomicUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "description": "code",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ExpensesIncomesFullInfoDTO"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/openbudget/national/cons/functional": {
+      "get": {
+        "tags": [
+          "Openbudget bot"
+        ],
+        "summary": "Повертає видатки державного бюджету за функціональною класифікацією",
+        "operationId": "getExpensesFunctionalUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "description": "code",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ExpensesIncomesFullInfoDTO"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/openbudget/national/cons/program": {
+      "get": {
+        "tags": [
+          "Openbudget bot"
+        ],
+        "summary": "Повертає видатки державного бюджету за програмною класифікацією",
+        "operationId": "getExpensesProgramUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "description": "code",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ExpensesIncomesFullInfoDTO"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/openbudget/national/inco": {
+      "get": {
+        "tags": [
+          "Openbudget bot"
+        ],
+        "summary": "Пошук за доходами ДБ",
+        "operationId": "getNationalIncoUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "description": "code",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ExpensesIncomesFullInfoDTO"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/openbudget/national/total": {
+      "get": {
+        "tags": [
+          "Openbudget bot"
+        ],
+        "summary": "Загальна інформація по державному бюдету",
+        "operationId": "getNationalTotalInfoUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/TotalDTO"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/openbudget/ping": {
+      "get": {
+        "tags": [
+          "Openbudget bot"
+        ],
+        "summary": "Перевірка доступності API",
+        "operationId": "pingUsingGET_1",
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/spending/disposer/states": {
+      "post": {
+        "tags": [
+          "Spending bot"
+        ],
+        "summary": "Повертає статус розпорядника",
+        "operationId": "getDisposersStateUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "request",
+            "description": "request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EdrpouRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/DisposerStatResponse«string»"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/spending/disposer/{edrpou}": {
+      "get": {
+        "tags": [
+          "Spending bot"
+        ],
+        "summary": "Інформація про розпорядника бюджетних коштів",
+        "operationId": "getDisposerUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "edrpou",
+            "in": "path",
+            "description": "edrpou",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/OrganizationInfoDTO"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/spending/dynamic/expenses": {
+      "get": {
+        "tags": [
+          "Spending bot"
+        ],
+        "summary": "Динаміка витрат",
+        "operationId": "getExpensesDynamicUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "edrpou",
+            "in": "query",
+            "description": "edrpou",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "description": "year",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/DynamicYearDTO"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/spending/dynamic/incomes": {
+      "get": {
+        "tags": [
+          "Spending bot"
+        ],
+        "summary": "Динаміка надходжень",
+        "operationId": "getIncomesDynamicUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "edrpou",
+            "in": "query",
+            "description": "edrpou",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "description": "year",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/DynamicYearDTO"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/spending/ping": {
+      "get": {
+        "tags": [
+          "Spending bot"
+        ],
+        "summary": "Перевірка доступності API",
+        "operationId": "pingUsingGET_2",
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/spending/reporting/info": {
+      "post": {
+        "tags": [
+          "Spending bot"
+        ],
+        "summary": "Інформація про неопублікування організацією жодного документа за звітній період",
+        "operationId": "getReportingPeriodInfoUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "request",
+            "description": "request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EdrpouRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ReportingInfoDTO"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/spending/statistic/documents": {
+      "post": {
+        "tags": [
+          "Spending bot"
+        ],
+        "summary": "Статистика опублікованих документів за вчора",
+        "operationId": "getDisposerChangesUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "request",
+            "description": "request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EdrpouRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/DisposerStatResponse«DisposerStatDTO»"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/spending/statistic/transactions": {
+      "post": {
+        "tags": [
+          "Spending bot"
+        ],
+        "summary": "Статистика опублікованих транзакцій за вчора",
+        "operationId": "getYesterdayTransactionsStatUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "request",
+            "description": "request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EdrpouRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/DisposerStatResponse«Map«string,long»»"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/spending/top10/payers": {
+      "get": {
+        "tags": [
+          "Spending bot"
+        ],
+        "summary": "Топ 10 платників бюджетних коштів",
+        "operationId": "getTop10PayersUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "kpk",
+            "in": "query",
+            "description": "kpk",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "description": "month",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "description": "year",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/BudgCostStatDTO"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/spending/top10/recipients": {
+      "get": {
+        "tags": [
+          "Spending bot"
+        ],
+        "summary": "Топ 10 отримувачів бюджетних коштів",
+        "operationId": "getTop10RecipientsUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "kpk",
+            "in": "query",
+            "description": "kpk",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "description": "month",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "description": "year",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/BudgCostStatDTO"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    }
+  },
+  "definitions": {
+    "BudgCostStatDTO": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "edrpou": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "sum": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "title": "BudgCostStatDTO"
+    },
+    "DisposerStatDTO": {
+      "type": "object",
+      "properties": {
+        "cntSignActs": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "cntSignAddendums": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "cntSignContracts": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "cntSignFines": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "cntSignReports": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "DisposerStatDTO"
+    },
+    "DisposerStatResponse«DisposerStatDTO»": {
+      "type": "object",
+      "properties": {
+        "response": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/DisposerStatDTO"
+          }
+        }
+      },
+      "title": "DisposerStatResponse«DisposerStatDTO»"
+    },
+    "DisposerStatResponse«Map«string,long»»": {
+      "type": "object",
+      "properties": {
+        "response": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
+      "title": "DisposerStatResponse«Map«string,long»»"
+    },
+    "DisposerStatResponse«string»": {
+      "type": "object",
+      "properties": {
+        "response": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "title": "DisposerStatResponse«string»"
+    },
+    "DynamicDTO": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        },
+        "sum": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "title": "DynamicDTO"
+    },
+    "DynamicYearDTO": {
+      "type": "object",
+      "properties": {
+        "chosenYear": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DynamicDTO"
+          }
+        },
+        "currentYear": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DynamicDTO"
+          }
+        }
+      },
+      "title": "DynamicYearDTO"
+    },
+    "EdrpouRequest": {
+      "type": "object",
+      "properties": {
+        "edrpous": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "title": "EdrpouRequest"
+    },
+    "ExpensesIncomesFullInfoDTO": {
+      "type": "object",
+      "properties": {
+        "info": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ExpensesIncomesInfoDTO"
+          }
+        },
+        "month": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "year": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "ExpensesIncomesFullInfoDTO"
+    },
+    "ExpensesIncomesInfoDTO": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "codeName": {
+          "type": "string"
+        },
+        "donePeriod": {
+          "type": "number",
+          "format": "double"
+        },
+        "percentPlanBeginYear": {
+          "type": "number",
+          "format": "double"
+        },
+        "planBeginYear": {
+          "type": "number",
+          "format": "double"
+        },
+        "planCorrectionBeginYear": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "title": "ExpensesIncomesInfoDTO"
+    },
+    "InfoDTO": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "InfoDTO"
+    },
+    "Map«string,long»": {
+      "type": "object",
+      "title": "Map«string,long»",
+      "additionalProperties": {
+        "type": "integer",
+        "format": "int64"
+      }
+    },
+    "OrganizationInfoDTO": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "director": {
+          "type": "string"
+        },
+        "edrpou": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "koatuu": {
+          "type": "string"
+        },
+        "kopfg": {
+          "type": "string"
+        },
+        "kved": {
+          "type": "string"
+        },
+        "kvedName": {
+          "type": "string"
+        },
+        "orgForm": {
+          "type": "string"
+        },
+        "orgName": {
+          "type": "string"
+        },
+        "orgType": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "registrationDate": {
+          "type": "string",
+          "example": "yyyy-MM-dd"
+        },
+        "state": {
+          "type": "string"
+        }
+      },
+      "title": "OrganizationInfoDTO"
+    },
+    "PayerDTO": {
+      "type": "object",
+      "properties": {
+        "payerIpn": {
+          "type": "string"
+        },
+        "payerName": {
+          "type": "string"
+        }
+      },
+      "title": "PayerDTO"
+    },
+    "PdvAggregateDto": {
+      "type": "object",
+      "properties": {
+        "countPd": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "payerIpn": {
+          "type": "string"
+        },
+        "payerName": {
+          "type": "string"
+        },
+        "sumBv": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "title": "PdvAggregateDto"
+    },
+    "PdvDTO": {
+      "type": "object",
+      "properties": {
+        "compensationDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "compensationSum": {
+          "type": "number",
+          "format": "double"
+        },
+        "declarationDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "declarationNumber": {
+          "type": "string"
+        },
+        "declarationSum": {
+          "type": "number",
+          "format": "double"
+        },
+        "payerIpn": {
+          "type": "string"
+        },
+        "payerName": {
+          "type": "string"
+        },
+        "refusalDate": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "title": "PdvDTO"
+    },
+    "ProjectDTO": {
+      "type": "object",
+      "properties": {
+        "beneficiar": {
+          "type": "string"
+        },
+        "creditDateBegin": {
+          "type": "string",
+          "example": "dd-MM-yyyy"
+        },
+        "creditDateEnd": {
+          "type": "string",
+          "example": "dd-MM-yyyy"
+        },
+        "creditName": {
+          "type": "string"
+        },
+        "creditNum": {
+          "type": "string"
+        },
+        "creditSum": {
+          "type": "number",
+          "format": "double"
+        },
+        "creditorName": {
+          "type": "string"
+        },
+        "creditorSum": {
+          "type": "number",
+          "format": "double"
+        },
+        "effectiveDate": {
+          "type": "string",
+          "example": "dd-MM-yyyy"
+        },
+        "finConditions": {
+          "type": "string"
+        },
+        "fundsAvailableBegin": {
+          "type": "string",
+          "example": "dd-MM-yyyy"
+        },
+        "fundsAvailableEnd": {
+          "type": "string",
+          "example": "dd-MM-yyyy"
+        },
+        "grantSum": {
+          "type": "number",
+          "format": "double"
+        },
+        "initiator": {
+          "type": "string"
+        },
+        "projectCur": {
+          "type": "string"
+        },
+        "projectFieldName": {
+          "type": "string"
+        },
+        "projectId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "projectPurpose": {
+          "type": "string"
+        },
+        "projectStateName": {
+          "type": "string"
+        },
+        "projectSum": {
+          "type": "number",
+          "format": "double"
+        },
+        "ratificationDate": {
+          "type": "string",
+          "example": "dd-MM-yyyy"
+        },
+        "responsibleExecutorName": {
+          "type": "string"
+        },
+        "ukrCofinSum": {
+          "type": "number",
+          "format": "double"
+        },
+        "usedSum": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "title": "ProjectDTO"
+    },
+    "ProjectStatDTO": {
+      "type": "object",
+      "properties": {
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ProjectStatDetailsDTO"
+          }
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "ProjectStatDTO"
+    },
+    "ProjectStatDetailsDTO": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "curr": {
+          "type": "string"
+        },
+        "sum": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "title": "ProjectStatDetailsDTO"
+    },
+    "ReportingInfoDTO": {
+      "type": "object",
+      "properties": {
+        "notReportedOrgs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "quarter": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "year": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "ReportingInfoDTO"
+    },
+    "TotalDTO": {
+      "type": "object",
+      "properties": {
+        "actualExpense": {
+          "type": "number",
+          "format": "double"
+        },
+        "actualExpensePercent": {
+          "type": "number",
+          "format": "double"
+        },
+        "actualIncome": {
+          "type": "number",
+          "format": "double"
+        },
+        "actualIncomePercent": {
+          "type": "number",
+          "format": "double"
+        },
+        "budgetName": {
+          "type": "string"
+        },
+        "budgetType": {
+          "type": "string"
+        },
+        "month": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "plannedExpense": {
+          "type": "number",
+          "format": "double"
+        },
+        "plannedIncome": {
+          "type": "number",
+          "format": "double"
+        },
+        "year": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "TotalDTO"
+    }
+  }
+}

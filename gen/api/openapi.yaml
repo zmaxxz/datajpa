@@ -1,0 +1,1532 @@
+openapi: 3.0.1
+info:
+  title: Сервіс чатбота
+  version: "1.0"
+servers:
+- url: //chat-bot.openbudget.gov.ua/
+tags:
+- description: Dwh Controller
+  name: DWH
+- description: Ifi Controller
+  name: IFIs bot
+- description: Open Budget Controller
+  name: Openbudget bot
+- description: Spending Controller
+  name: Spending bot
+paths:
+  /dwh/pdv:
+    get:
+      deprecated: false
+      operationId: getPdvUsingGET
+      parameters:
+      - description: declarationNumber
+        in: query
+        name: declarationNumber
+        schema:
+          type: string
+      - description: payerIpn
+        in: query
+        name: payerIpn
+        schema:
+          type: string
+      - description: payerName
+        in: query
+        name: payerName
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                items:
+                  $ref: '#/components/schemas/PdvDTO'
+                type: array
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: getPdv
+      tags:
+      - DWH
+      x-accepts: '*/*'
+  /dwh/pdv/aggregate:
+    get:
+      deprecated: false
+      operationId: getAggregateResultUsingGET
+      parameters:
+      - allowEmptyValue: false
+        description: payer ipn or name
+        in: query
+        name: searchParam
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PdvAggregateDto'
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: getAggregateResult
+      tags:
+      - DWH
+      x-accepts: '*/*'
+  /dwh/pdv/payer:
+    get:
+      deprecated: false
+      operationId: getPayerInfoUsingGET
+      parameters:
+      - description: payerName
+        in: query
+        name: payerName
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                items:
+                  $ref: '#/components/schemas/PayerDTO'
+                type: array
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: getPayerInfo
+      tags:
+      - DWH
+      x-accepts: '*/*'
+  /ifis/creditors:
+    get:
+      deprecated: false
+      operationId: projectCreditorsUsingGET
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/InfoDTO'
+                type: array
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Отримати список МФО
+      tags:
+      - IFIs bot
+      x-accepts: application/json
+  /ifis/fields:
+    get:
+      deprecated: false
+      operationId: projectFieldsUsingGET
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/InfoDTO'
+                type: array
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Отримати список галузей проектів
+      tags:
+      - IFIs bot
+      x-accepts: application/json
+  /ifis/ping:
+    get:
+      deprecated: false
+      operationId: pingUsingGET
+      responses:
+        "200":
+          content: {}
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Перевірка доступності API
+      tags:
+      - IFIs bot
+      x-accepts: application/json
+  /ifis/project/{projectId}:
+    get:
+      deprecated: false
+      operationId: projectInfoUsingGET
+      parameters:
+      - description: projectId
+        in: path
+        name: projectId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectDTO'
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Відображення повної інформації про проект
+      tags:
+      - IFIs bot
+      x-accepts: application/json
+  /ifis/projects:
+    get:
+      deprecated: false
+      operationId: projectByFieldUsingGET
+      parameters:
+      - description: creditorId
+        in: query
+        name: creditorId
+        schema:
+          format: int64
+          type: integer
+      - description: fieldId
+        in: query
+        name: fieldId
+        schema:
+          format: int64
+          type: integer
+      - description: projectName
+        in: query
+        name: projectName
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/InfoDTO'
+                type: array
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Відображення переліку проектів
+      tags:
+      - IFIs bot
+      x-accepts: application/json
+  /ifis/statistic/{statisticType}:
+    get:
+      deprecated: false
+      operationId: statisticUsingGET
+      parameters:
+      - description: statisticType
+        in: path
+        name: statisticType
+        required: true
+        schema:
+          enum:
+          - STATE
+          - FIELD
+          - CREDITOR
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ProjectStatDTO'
+                type: array
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Статистика по стадіям
+      tags:
+      - IFIs bot
+      x-accepts: application/json
+  /openbudget/local/cons/economic:
+    get:
+      deprecated: false
+      operationId: getLocalExpensesEconomicUsingGET
+      parameters:
+      - description: code
+        in: query
+        name: code
+        required: true
+        schema:
+          type: string
+      - description: codeBudget
+        in: query
+        name: codeBudget
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpensesIncomesFullInfoDTO'
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Повертає видатки місцевого бюджету за економічною класифікацією
+      tags:
+      - Openbudget bot
+      x-accepts: application/json
+  /openbudget/local/cons/functional:
+    get:
+      deprecated: false
+      operationId: getLocalExpensesFunctionalUsingGET
+      parameters:
+      - description: code
+        in: query
+        name: code
+        required: true
+        schema:
+          type: string
+      - description: codeBudget
+        in: query
+        name: codeBudget
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpensesIncomesFullInfoDTO'
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Повертає видатки місцевого бюджету за функціональною класифікацією
+      tags:
+      - Openbudget bot
+      x-accepts: application/json
+  /openbudget/local/cons/program:
+    get:
+      deprecated: false
+      operationId: getLocalExpensesProgramUsingGET
+      parameters:
+      - description: code
+        in: query
+        name: code
+        required: true
+        schema:
+          type: string
+      - description: codeBudget
+        in: query
+        name: codeBudget
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpensesIncomesFullInfoDTO'
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Повертає видатки місцевого бюджету за програмною класифікацією
+      tags:
+      - Openbudget bot
+      x-accepts: application/json
+  /openbudget/local/inco:
+    get:
+      deprecated: false
+      operationId: getLocalIncoUsingGET
+      parameters:
+      - description: code
+        in: query
+        name: code
+        schema:
+          type: string
+      - description: codeBudget
+        in: query
+        name: codeBudget
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpensesIncomesFullInfoDTO'
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Пошук за доходами МБ
+      tags:
+      - Openbudget bot
+      x-accepts: application/json
+  /openbudget/local/total:
+    get:
+      deprecated: false
+      operationId: getLocalTotalInfoUsingGET
+      parameters:
+      - description: code
+        in: query
+        name: code
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TotalDTO'
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Загальна інформація по місцевому бюдету
+      tags:
+      - Openbudget bot
+      x-accepts: application/json
+  /openbudget/national/cons/economic:
+    get:
+      deprecated: false
+      operationId: getExpensesEconomicUsingGET
+      parameters:
+      - description: code
+        in: query
+        name: code
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpensesIncomesFullInfoDTO'
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Повертає видатки державного бюджету за економічною класифікацією
+      tags:
+      - Openbudget bot
+      x-accepts: application/json
+  /openbudget/national/cons/functional:
+    get:
+      deprecated: false
+      operationId: getExpensesFunctionalUsingGET
+      parameters:
+      - description: code
+        in: query
+        name: code
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpensesIncomesFullInfoDTO'
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Повертає видатки державного бюджету за функціональною класифікацією
+      tags:
+      - Openbudget bot
+      x-accepts: application/json
+  /openbudget/national/cons/program:
+    get:
+      deprecated: false
+      operationId: getExpensesProgramUsingGET
+      parameters:
+      - description: code
+        in: query
+        name: code
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpensesIncomesFullInfoDTO'
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Повертає видатки державного бюджету за програмною класифікацією
+      tags:
+      - Openbudget bot
+      x-accepts: application/json
+  /openbudget/national/inco:
+    get:
+      deprecated: false
+      operationId: getNationalIncoUsingGET
+      parameters:
+      - description: code
+        in: query
+        name: code
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpensesIncomesFullInfoDTO'
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Пошук за доходами ДБ
+      tags:
+      - Openbudget bot
+      x-accepts: application/json
+  /openbudget/national/total:
+    get:
+      deprecated: false
+      operationId: getNationalTotalInfoUsingGET
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TotalDTO'
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Загальна інформація по державному бюдету
+      tags:
+      - Openbudget bot
+      x-accepts: application/json
+  /openbudget/ping:
+    get:
+      deprecated: false
+      operationId: pingUsingGET_1
+      responses:
+        "200":
+          content: {}
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Перевірка доступності API
+      tags:
+      - Openbudget bot
+      x-accepts: application/json
+  /spending/disposer/states:
+    post:
+      deprecated: false
+      operationId: getDisposersStateUsingPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EdrpouRequest'
+        description: request
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisposerStatResponse«string»'
+          description: OK
+        "201":
+          content: {}
+          description: Created
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Повертає статус розпорядника
+      tags:
+      - Spending bot
+      x-codegen-request-body-name: request
+      x-contentType: application/json
+      x-accepts: application/json
+  /spending/disposer/{edrpou}:
+    get:
+      deprecated: false
+      operationId: getDisposerUsingGET
+      parameters:
+      - description: edrpou
+        in: path
+        name: edrpou
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/OrganizationInfoDTO'
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Інформація про розпорядника бюджетних коштів
+      tags:
+      - Spending bot
+      x-accepts: '*/*'
+  /spending/dynamic/expenses:
+    get:
+      deprecated: false
+      operationId: getExpensesDynamicUsingGET
+      parameters:
+      - description: edrpou
+        in: query
+        name: edrpou
+        required: true
+        schema:
+          type: string
+      - description: year
+        in: query
+        name: year
+        required: true
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DynamicYearDTO'
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Динаміка витрат
+      tags:
+      - Spending bot
+      x-accepts: application/json
+  /spending/dynamic/incomes:
+    get:
+      deprecated: false
+      operationId: getIncomesDynamicUsingGET
+      parameters:
+      - description: edrpou
+        in: query
+        name: edrpou
+        required: true
+        schema:
+          type: string
+      - description: year
+        in: query
+        name: year
+        required: true
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DynamicYearDTO'
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Динаміка надходжень
+      tags:
+      - Spending bot
+      x-accepts: application/json
+  /spending/ping:
+    get:
+      deprecated: false
+      operationId: pingUsingGET_2
+      responses:
+        "200":
+          content: {}
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Перевірка доступності API
+      tags:
+      - Spending bot
+      x-accepts: application/json
+  /spending/reporting/info:
+    post:
+      deprecated: false
+      operationId: getReportingPeriodInfoUsingPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EdrpouRequest'
+        description: request
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportingInfoDTO'
+          description: OK
+        "201":
+          content: {}
+          description: Created
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Інформація про неопублікування організацією жодного документа за звітній
+        період
+      tags:
+      - Spending bot
+      x-codegen-request-body-name: request
+      x-contentType: application/json
+      x-accepts: application/json
+  /spending/statistic/documents:
+    post:
+      deprecated: false
+      operationId: getDisposerChangesUsingPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EdrpouRequest'
+        description: request
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisposerStatResponse«DisposerStatDTO»'
+          description: OK
+        "201":
+          content: {}
+          description: Created
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Статистика опублікованих документів за вчора
+      tags:
+      - Spending bot
+      x-codegen-request-body-name: request
+      x-contentType: application/json
+      x-accepts: application/json
+  /spending/statistic/transactions:
+    post:
+      deprecated: false
+      operationId: getYesterdayTransactionsStatUsingPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EdrpouRequest'
+        description: request
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisposerStatResponse«Map«string,long»»'
+          description: OK
+        "201":
+          content: {}
+          description: Created
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Статистика опублікованих транзакцій за вчора
+      tags:
+      - Spending bot
+      x-codegen-request-body-name: request
+      x-contentType: application/json
+      x-accepts: application/json
+  /spending/top10/payers:
+    get:
+      deprecated: false
+      operationId: getTop10PayersUsingGET
+      parameters:
+      - description: kpk
+        in: query
+        name: kpk
+        required: true
+        schema:
+          type: string
+      - description: month
+        in: query
+        name: month
+        schema:
+          format: int32
+          type: integer
+      - description: year
+        in: query
+        name: year
+        required: true
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/BudgCostStatDTO'
+                type: array
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Топ 10 платників бюджетних коштів
+      tags:
+      - Spending bot
+      x-accepts: application/json
+  /spending/top10/recipients:
+    get:
+      deprecated: false
+      operationId: getTop10RecipientsUsingGET
+      parameters:
+      - description: kpk
+        in: query
+        name: kpk
+        required: true
+        schema:
+          type: string
+      - description: month
+        in: query
+        name: month
+        schema:
+          format: int32
+          type: integer
+      - description: year
+        in: query
+        name: year
+        required: true
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/BudgCostStatDTO'
+                type: array
+          description: OK
+        "401":
+          content: {}
+          description: Unauthorized
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: Not Found
+      summary: Топ 10 отримувачів бюджетних коштів
+      tags:
+      - Spending bot
+      x-accepts: application/json
+components:
+  schemas:
+    BudgCostStatDTO:
+      example:
+        amount: 0
+        edrpou: edrpou
+        name: name
+        sum: 6.027456183070403
+      properties:
+        amount:
+          format: int64
+          type: integer
+        edrpou:
+          type: string
+        name:
+          type: string
+        sum:
+          format: double
+          type: number
+      title: BudgCostStatDTO
+      type: object
+    DisposerStatDTO:
+      example:
+        cntSignContracts: 1
+        cntSignActs: 0
+        cntSignAddendums: 6
+        cntSignFines: 5
+        cntSignReports: 5
+      properties:
+        cntSignActs:
+          format: int64
+          type: integer
+        cntSignAddendums:
+          format: int64
+          type: integer
+        cntSignContracts:
+          format: int64
+          type: integer
+        cntSignFines:
+          format: int64
+          type: integer
+        cntSignReports:
+          format: int64
+          type: integer
+      title: DisposerStatDTO
+      type: object
+    DisposerStatResponse«DisposerStatDTO»:
+      example:
+        response:
+          key:
+            cntSignContracts: 1
+            cntSignActs: 0
+            cntSignAddendums: 6
+            cntSignFines: 5
+            cntSignReports: 5
+      properties:
+        response:
+          additionalProperties:
+            $ref: '#/components/schemas/DisposerStatDTO'
+          type: object
+      title: DisposerStatResponse«DisposerStatDTO»
+      type: object
+    DisposerStatResponse«Map«string,long»»:
+      example:
+        response:
+          key:
+            key: 0
+      properties:
+        response:
+          additionalProperties:
+            additionalProperties:
+              format: int64
+              type: integer
+            type: object
+          type: object
+      title: DisposerStatResponse«Map«string,long»»
+      type: object
+    DisposerStatResponse«string»:
+      example:
+        response:
+          key: response
+      properties:
+        response:
+          additionalProperties:
+            type: string
+          type: object
+      title: DisposerStatResponse«string»
+      type: object
+    DynamicDTO:
+      example:
+        date: date
+        sum: 0.8008281904610115
+      properties:
+        date:
+          type: string
+        sum:
+          format: double
+          type: number
+      title: DynamicDTO
+      type: object
+    DynamicYearDTO:
+      example:
+        chosenYear:
+        - date: date
+          sum: 0.8008281904610115
+        - date: date
+          sum: 0.8008281904610115
+        currentYear:
+        - date: date
+          sum: 0.8008281904610115
+        - date: date
+          sum: 0.8008281904610115
+      properties:
+        chosenYear:
+          items:
+            $ref: '#/components/schemas/DynamicDTO'
+          type: array
+        currentYear:
+          items:
+            $ref: '#/components/schemas/DynamicDTO'
+          type: array
+      title: DynamicYearDTO
+      type: object
+    EdrpouRequest:
+      example:
+        edrpous:
+        - edrpous
+        - edrpous
+      properties:
+        edrpous:
+          items:
+            type: string
+          type: array
+      title: EdrpouRequest
+      type: object
+    ExpensesIncomesFullInfoDTO:
+      example:
+        month: 5
+        year: 2
+        info:
+        - planBeginYear: 1.4658129805029452
+          code: code
+          planCorrectionBeginYear: 5.962133916683182
+          percentPlanBeginYear: 6.027456183070403
+          codeName: codeName
+          donePeriod: 0.8008281904610115
+        - planBeginYear: 1.4658129805029452
+          code: code
+          planCorrectionBeginYear: 5.962133916683182
+          percentPlanBeginYear: 6.027456183070403
+          codeName: codeName
+          donePeriod: 0.8008281904610115
+      properties:
+        info:
+          items:
+            $ref: '#/components/schemas/ExpensesIncomesInfoDTO'
+          type: array
+        month:
+          format: int32
+          type: integer
+        year:
+          format: int32
+          type: integer
+      title: ExpensesIncomesFullInfoDTO
+      type: object
+    ExpensesIncomesInfoDTO:
+      example:
+        planBeginYear: 1.4658129805029452
+        code: code
+        planCorrectionBeginYear: 5.962133916683182
+        percentPlanBeginYear: 6.027456183070403
+        codeName: codeName
+        donePeriod: 0.8008281904610115
+      properties:
+        code:
+          type: string
+        codeName:
+          type: string
+        donePeriod:
+          format: double
+          type: number
+        percentPlanBeginYear:
+          format: double
+          type: number
+        planBeginYear:
+          format: double
+          type: number
+        planCorrectionBeginYear:
+          format: double
+          type: number
+      title: ExpensesIncomesInfoDTO
+      type: object
+    InfoDTO:
+      example:
+        name: name
+        id: 0
+      properties:
+        id:
+          format: int32
+          type: integer
+        name:
+          type: string
+      title: InfoDTO
+      type: object
+    Map«string,long»:
+      additionalProperties:
+        format: int64
+        type: integer
+      title: Map«string,long»
+      type: object
+    OrganizationInfoDTO:
+      example:
+        orgForm: orgForm
+        address: address
+        orgName: orgName
+        director: director
+        kvedName: kvedName
+        orgType: orgType
+        edrpou: edrpou
+        phone: phone
+        koatuu: koatuu
+        kved: kved
+        registrationDate: yyyy-MM-dd
+        kopfg: kopfg
+        state: state
+        email: email
+      properties:
+        address:
+          type: string
+        director:
+          type: string
+        edrpou:
+          type: string
+        email:
+          type: string
+        koatuu:
+          type: string
+        kopfg:
+          type: string
+        kved:
+          type: string
+        kvedName:
+          type: string
+        orgForm:
+          type: string
+        orgName:
+          type: string
+        orgType:
+          type: string
+        phone:
+          type: string
+        registrationDate:
+          example: yyyy-MM-dd
+          type: string
+        state:
+          type: string
+      title: OrganizationInfoDTO
+      type: object
+    PayerDTO:
+      example:
+        payerName: payerName
+        payerIpn: payerIpn
+      properties:
+        payerIpn:
+          type: string
+        payerName:
+          type: string
+      title: PayerDTO
+      type: object
+    PdvAggregateDto:
+      example:
+        countPd: 0
+        sumBv: 6.027456183070403
+        payerName: payerName
+        payerIpn: payerIpn
+      properties:
+        countPd:
+          format: int64
+          type: integer
+        payerIpn:
+          type: string
+        payerName:
+          type: string
+        sumBv:
+          format: double
+          type: number
+      title: PdvAggregateDto
+      type: object
+    PdvDTO:
+      example:
+        declarationSum: 6.027456183070403
+        declarationNumber: declarationNumber
+        declarationDate: 2000-01-23
+        payerName: payerName
+        refusalDate: 2000-01-23
+        compensationDate: 2000-01-23
+        payerIpn: payerIpn
+        compensationSum: 0.8008281904610115
+      properties:
+        compensationDate:
+          format: date
+          type: string
+        compensationSum:
+          format: double
+          type: number
+        declarationDate:
+          format: date
+          type: string
+        declarationNumber:
+          type: string
+        declarationSum:
+          format: double
+          type: number
+        payerIpn:
+          type: string
+        payerName:
+          type: string
+        refusalDate:
+          format: date
+          type: string
+      title: PdvDTO
+      type: object
+    ProjectDTO:
+      example:
+        fundsAvailableEnd: dd-MM-yyyy
+        projectPurpose: projectPurpose
+        creditorSum: 6.027456183070403
+        creditorName: creditorName
+        creditSum: 0.8008281904610115
+        grantSum: 1.4658129805029452
+        projectSum: 5.637376656633329
+        creditDateBegin: dd-MM-yyyy
+        initiator: initiator
+        ratificationDate: dd-MM-yyyy
+        beneficiar: beneficiar
+        finConditions: finConditions
+        projectCur: projectCur
+        projectFieldName: projectFieldName
+        ukrCofinSum: 2.3021358869347655
+        projectStateName: projectStateName
+        creditNum: creditNum
+        usedSum: 7.061401241503109
+        responsibleExecutorName: responsibleExecutorName
+        fundsAvailableBegin: dd-MM-yyyy
+        projectId: 5
+        creditName: creditName
+        effectiveDate: dd-MM-yyyy
+        creditDateEnd: dd-MM-yyyy
+      properties:
+        beneficiar:
+          type: string
+        creditDateBegin:
+          example: dd-MM-yyyy
+          type: string
+        creditDateEnd:
+          example: dd-MM-yyyy
+          type: string
+        creditName:
+          type: string
+        creditNum:
+          type: string
+        creditSum:
+          format: double
+          type: number
+        creditorName:
+          type: string
+        creditorSum:
+          format: double
+          type: number
+        effectiveDate:
+          example: dd-MM-yyyy
+          type: string
+        finConditions:
+          type: string
+        fundsAvailableBegin:
+          example: dd-MM-yyyy
+          type: string
+        fundsAvailableEnd:
+          example: dd-MM-yyyy
+          type: string
+        grantSum:
+          format: double
+          type: number
+        initiator:
+          type: string
+        projectCur:
+          type: string
+        projectFieldName:
+          type: string
+        projectId:
+          format: int64
+          type: integer
+        projectPurpose:
+          type: string
+        projectStateName:
+          type: string
+        projectSum:
+          format: double
+          type: number
+        ratificationDate:
+          example: dd-MM-yyyy
+          type: string
+        responsibleExecutorName:
+          type: string
+        ukrCofinSum:
+          format: double
+          type: number
+        usedSum:
+          format: double
+          type: number
+      title: ProjectDTO
+      type: object
+    ProjectStatDTO:
+      example:
+        name: name
+        details:
+        - amount: 0
+          sum: 6.027456183070403
+          curr: curr
+        - amount: 0
+          sum: 6.027456183070403
+          curr: curr
+      properties:
+        details:
+          items:
+            $ref: '#/components/schemas/ProjectStatDetailsDTO'
+          type: array
+        name:
+          type: string
+      title: ProjectStatDTO
+      type: object
+    ProjectStatDetailsDTO:
+      example:
+        amount: 0
+        sum: 6.027456183070403
+        curr: curr
+      properties:
+        amount:
+          format: int32
+          type: integer
+        curr:
+          type: string
+        sum:
+          format: double
+          type: number
+      title: ProjectStatDetailsDTO
+      type: object
+    ReportingInfoDTO:
+      example:
+        year: 6
+        notReportedOrgs:
+        - notReportedOrgs
+        - notReportedOrgs
+        quarter: 0
+      properties:
+        notReportedOrgs:
+          items:
+            type: string
+          type: array
+        quarter:
+          format: int32
+          type: integer
+        year:
+          format: int32
+          type: integer
+      title: ReportingInfoDTO
+      type: object
+    TotalDTO:
+      example:
+        budgetType: budgetType
+        plannedExpense: 2.3021358869347655
+        month: 5
+        year: 9
+        actualIncome: 1.4658129805029452
+        actualIncomePercent: 5.962133916683182
+        actualExpensePercent: 6.027456183070403
+        plannedIncome: 7.061401241503109
+        budgetName: budgetName
+        actualExpense: 0.8008281904610115
+      properties:
+        actualExpense:
+          format: double
+          type: number
+        actualExpensePercent:
+          format: double
+          type: number
+        actualIncome:
+          format: double
+          type: number
+        actualIncomePercent:
+          format: double
+          type: number
+        budgetName:
+          type: string
+        budgetType:
+          type: string
+        month:
+          format: int32
+          type: integer
+        plannedExpense:
+          format: double
+          type: number
+        plannedIncome:
+          format: double
+          type: number
+        year:
+          format: int32
+          type: integer
+      title: TotalDTO
+      type: object
+x-original-swagger-version: "2.0"
+
